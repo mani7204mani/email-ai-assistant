@@ -38,18 +38,21 @@ def get_client_config():
                 }
         # Show exact error so we know what's wrong
         raise Exception(f"Secrets error: {str(e)}")
-
 def get_auth_url(redirect_uri):
-    config   = get_client_config()
-    auth_url = (
-        "https://accounts.google.com/o/oauth2/v2/auth"
-        f"?client_id={config['client_id']}"
-        f"&redirect_uri={redirect_uri}"
-        "&response_type=code"
-        "&scope=https://www.googleapis.com/auth/gmail.modify"
-        "&access_type=offline"
-        "&prompt=consent"
-    )
+    config = get_client_config()
+    
+    from urllib.parse import urlencode
+    
+    params = {
+        "client_id":     config["client_id"],
+        "redirect_uri":  redirect_uri,
+        "response_type": "code",
+        "scope":         "https://www.googleapis.com/auth/gmail.modify",
+        "access_type":   "offline",
+        "prompt":        "consent"
+    }
+    
+    auth_url = "https://accounts.google.com/o/oauth2/v2/auth?" + urlencode(params)
     return auth_url
 
 def get_service_from_code(code, redirect_uri):
