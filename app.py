@@ -39,18 +39,31 @@ if 'service' not in st.session_state:
         </div>
         """, unsafe_allow_html=True)
 
-        col1, col2, col3 = st.columns([1,2,1])
-        with col2:
-            if st.button("🔗 Login with Gmail", type="primary", use_container_width=True):
-                try:
-                    st.write(f"DEBUG - Using redirect URI: {REDIRECT_URI}")
-                    auth_url = get_auth_url(REDIRECT_URI)
-                    st.markdown(f'''
-                    <meta http-equiv="refresh" content="0; url={auth_url}">
-                    <p>Redirecting... <a href="{auth_url}">Click here</a> if not redirected.</p>
-                    ''', unsafe_allow_html=True)
-                except Exception as e:
-                    st.error(f"Error generating login URL: {e}")
+        try:
+            auth_url = get_auth_url(REDIRECT_URI)
+            col1, col2, col3 = st.columns([1,2,1])
+            with col2:
+                st.markdown(f"""
+                <div style="text-align:center;">
+                    <a href="{auth_url}" target="_self" style="text-decoration:none;">
+                        <div style="
+                            background-color:#EA4335;
+                            color:white;
+                            padding:14px 32px;
+                            font-size:16px;
+                            border-radius:8px;
+                            font-family:Arial,sans-serif;
+                            display:inline-block;
+                            cursor:pointer;
+                        ">🔗 Login with Gmail</div>
+                    </a>
+                    <p style="color:#888; font-size:12px; margin-top:12px;">
+                        🔒 We only read your emails. Your data is never stored.
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
+        except Exception as e:
+            st.error(f"Error generating login URL: {e}")
 
     st.stop()
 
