@@ -7,7 +7,10 @@ from ai_engine import summarize_email, generate_replies
 st.set_page_config(page_title="AI Email Assistant", page_icon="📧", layout="wide")
 st.title("📧 AI Email Summarizer & Reply Generator")
 
-REDIRECT_URI = os.environ.get("REDIRECT_URI", "http://localhost:8501")
+try:
+    REDIRECT_URI = st.secrets["REDIRECT_URI"]
+except:
+    REDIRECT_URI = "http://localhost:8501"
 
 # ── Step 1: Gmail Auth ──────────────────────────────────────────
 if 'service' not in st.session_state:
