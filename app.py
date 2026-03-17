@@ -45,7 +45,6 @@ if 'service' not in st.session_state:
             with col2:
                 st.markdown(f"""
                 <div style="text-align:center;">
-                    
                     <a href="{auth_url}" target="_blank" style="text-decoration:none;">
                         <div style="
                             background-color:#EA4335;
