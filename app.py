@@ -43,6 +43,7 @@ if 'service' not in st.session_state:
         with col2:
             if st.button("🔗 Login with Gmail", type="primary", use_container_width=True):
                 try:
+                    st.write(f"DEBUG - Using redirect URI: {REDIRECT_URI}")
                     auth_url = get_auth_url(REDIRECT_URI)
                     st.markdown(f'''
                     <meta http-equiv="refresh" content="0; url={auth_url}">
