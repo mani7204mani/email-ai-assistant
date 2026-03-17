@@ -12,21 +12,29 @@ import re
 SCOPES = ['https://www.googleapis.com/auth/gmail.modify']
 
 def get_client_config():
+    # First try Streamlit secrets
     try:
-        if 'google_credentials' in st.secrets:
+        import streamlit as st
+        creds = st.secrets.get("google_credentials", None)
+        if creds:
             return {
-                "client_id":     st.secrets["google_credentials"]["client_id"],
-                "client_secret": st.secrets["google_credentials"]["client_secret"],
+                "client_id":     creds["client_id"],
+                "client_secret": creds["client_secret"],
             }
     except Exception:
         pass
-    with open('credentials.json') as f:
-        data = json.load(f)
-        key  = 'web' if 'web' in data else 'installed'
-        return {
-            "client_id":     data[key]["client_id"],
-            "client_secret": data[key]["client_secret"],
-        }
+
+    # Then try credentials.json file
+    if os.path.exists('credentials.json'):
+        with open('credentials.json') as f:
+            data = json.load(f)
+            key  = 'web' if 'web' in data else 'installed'
+            return {
+                "client_id":     data[key]["client_id"],
+                "client_secret": data[key]["client_secret"],
+            }
+
+    raise Exception("No credentials found! Add credentials to .streamlit/secrets.toml")
 
 def get_auth_url(redirect_uri):
     config   = get_client_config()
